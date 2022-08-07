@@ -85,12 +85,18 @@ componentDidMount = async () => {
         <div>
           <ul>
             {arrayProdutos.length !== 0
-              ? arrayProdutos.map(({ title, price, thumbnail }) => (
-                <li key={ title } data-testid="product">
-                  <p>{title}</p>
-                  <p>{price}</p>
-                  <img src={ thumbnail } alt={ title } />
-                </li>)) : <p>Nenhum produto foi encontrado</p>}
+              ? arrayProdutos.map(({ title, price, thumbnail, id }) => (
+                <Link
+                  to={ `/productDetails/${id}` }
+                  key={ id }
+                  data-testid="product-detail-link"
+                >
+                  <li data-testid="product">
+                    <p>{title}</p>
+                    <p>{price}</p>
+                    <img src={ thumbnail } alt={ title } />
+                  </li>
+                </Link>)) : <p>Nenhum produto foi encontrado</p>}
           </ul>
         </div>
       </div>
