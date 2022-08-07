@@ -30,15 +30,10 @@ componentDidMount = async () => {
     this.setState({ arrayProdutos: termos.results });
   }
 
-  // renderProducts = () => {
-  //   const { arrayProdutos } = this.state;
-  //   return arrayProdutos.map(({ title, price, thumbnail }) => (
-  //     <li key={ title }>
-  //       <p>{title}</p>
-  //       <p>{price}</p>
-  //       <img src={ thumbnail } alt={ title } />
-  //     </li>));
-  // }
+  handleClickButton = async ({ target }) => {
+    const termos = await getProductsFromCategoryAndQuery(target.value, '');
+    this.setState({ arrayProdutos: termos.results });
+  }
 
   render() {
     const { campoDeBusca, arrayCategorias, arrayProdutos } = this.state;
@@ -76,11 +71,13 @@ componentDidMount = async () => {
           </Link>
         </div>
         <div>
-          { arrayCategorias.map(({ name }) => (
+          { arrayCategorias.map(({ name, id }) => (
             <button
               key={ name }
               type="button"
+              value={ id }
               data-testid="category"
+              onClick={ this.handleClickButton }
             >
               {name}
             </button>)) }
