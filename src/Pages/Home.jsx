@@ -1,13 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { getCategories } from '../services/api';
 
 class Home extends React.Component {
   constructor() {
     super();
     this.state = {
       campoDeBusca: '',
+      arrayCategorias: [],
     };
   }
+
+componentDidMount = async () => {
+  const categoria = await getCategories();
+  this.setState({ arrayCategorias: categoria });
+}
 
   handleChange = ({ target }) => {
     const { name, value } = target;
@@ -17,7 +24,7 @@ class Home extends React.Component {
   };
 
   render() {
-    const { campoDeBusca } = this.state;
+    const { campoDeBusca, arrayCategorias } = this.state;
     return (
       <div>
         <label htmlFor="input">
@@ -41,6 +48,16 @@ class Home extends React.Component {
           >
             Carrinho
           </Link>
+        </div>
+        <div>
+          { arrayCategorias.map(({ name }) => (
+            <button
+              key={ name }
+              type="button"
+              data-testid="category"
+            >
+              {name}
+            </button>)) }
         </div>
       </div>
     );
