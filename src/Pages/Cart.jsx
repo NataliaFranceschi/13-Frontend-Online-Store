@@ -8,12 +8,39 @@ class Cart extends React.Component {
       <p data-testid="shopping-cart-empty-message">
         Seu carrinho está vazio
       </p>);
+    const produtos = arrayCarrinho.map(({ nome, preço, quantidade, id }) => (
+      <li key={ id }>
+        <p data-testid="shopping-cart-product-name">{ nome }</p>
+        <p>{ preço * quantidade }</p>
+        <p data-testid="shopping-cart-product-quantity">{ quantidade }</p>
+        <button
+          onClick={ () => this.clickToAddOrRemove(id, 'add') }
+          type="button"
+          data-testid="product-increase-quantity"
+        >
+          +
+        </button>
+        <button
+          onClick={ () => this.clickToAddOrRemove(id, 'remove', quantidade) }
+          type="button"
+          data-testid="product-decrease-quantity"
+        >
+          -
+        </button>
+        <button
+          onClick={ () => this.removeFromCart(id) }
+          type="button"
+          data-testid="remove-product"
+        >
+          REMOVER
+        </button>
+      </li>));
     return (
       <div>
         {
           arrayCarrinho.length === 0
             ? carrinhoVazio
-            : null
+            : <ul>{produtos}</ul>
         }
       </div>
     );
