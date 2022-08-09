@@ -11,6 +11,7 @@ class ProductDetails extends Component {
       thumbnail: '',
       price: 0,
       warranty: '',
+      id: '',
     };
   }
 
@@ -23,11 +24,13 @@ class ProductDetails extends Component {
       thumbnail,
       price,
       warranty,
+      id,
     });
   }
 
   render() {
-    const { title, thumbnail, price, warranty } = this.state;
+    const { title, thumbnail, price, warranty, id } = this.state;
+    const { addCarrinho } = this.props;
     return (
       <div>
         <ul>
@@ -39,8 +42,15 @@ class ProductDetails extends Component {
           <li>{warranty}</li>
         </ul>
         <Link to="/cart" data-testid="shopping-cart-button">
-          Comprar
+          Ir ao carrinho
         </Link>
+        <button
+          type="button"
+          data-testid="product-detail-add-to-cart"
+          onClick={ () => addCarrinho(title, price, id) }
+        >
+          Adicionar ao carrinho
+        </button>
       </div>
     );
   }
@@ -51,6 +61,7 @@ ProductDetails.propTypes = {
       id: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
+  addCarrinho: PropTypes.func.isRequired,
 };
 
 export default ProductDetails;
