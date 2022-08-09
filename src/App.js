@@ -13,6 +13,40 @@ class App extends React.Component {
     };
   }
 
+  componentDidMount = () => {
+    const xablau = Object.values(localStorage);
+    const mapXablau = xablau.map((produto) => JSON.parse(produto));
+    console.log((mapXablau));
+    this.setState({ arrayCarrinho: mapXablau });
+  }
+
+  clickToAddOrRemove = (id, name, quantidade) => {
+    const { arrayCarrinho } = this.state;
+    const newCart = arrayCarrinho.map((product) => {
+      if (product.id === id) {
+        if (quantidade === 1 && name === 'remove') return product;
+        if (name === 'add') product.quantidade += 1;
+        if (name === 'remove') product.quantidade -= 1;
+      }
+      return product;
+    });
+    localStorage.clear();
+    newCart.forEach((xablau) => {
+      localStorage.setItem(xablau.id, JSON.stringify(xablau));
+    });
+    this.setState({ arrayCarrinho: newCart });
+  }
+
+  removeFromCart = (id) => {
+    const { arrayCarrinho } = this.state;
+    const productRemoved = arrayCarrinho.filter((products) => products.id !== id);
+    localStorage.clear();
+    productRemoved.forEach((xablau) => {
+      localStorage.setItem(xablau.id, JSON.stringify(xablau));
+    });
+    this.setState({ arrayCarrinho: productRemoved });
+  }
+
   addCarrinho = (title, price, id) => {
     const { arrayCarrinho } = this.state;
     const produto = {
@@ -30,12 +64,19 @@ class App extends React.Component {
     if (!arrayCarrinho.some((item) => id === item.id)) {
       this.setState((prevState) => ({
         arrayCarrinho: [...prevState.arrayCarrinho, produto],
-      }));
-    } else { this.setState({ arrayCarrinho: newCarrinho }); }
+      }), this.localStorageM);
+    } else { this.setState({ arrayCarrinho: newCarrinho }, this.localStorageM); }
+  }
+
+  localStorageM = () => {
+    localStorage.clear();
+    const { arrayCarrinho } = this.state;
+    arrayCarrinho.forEach((xablau) => {
+      localStorage.setItem(xablau.id, JSON.stringify(xablau));
+    });
   }
 
   render() {
-    const { arrayCarrinho } = this.state;
     return (
       <BrowserRouter>
         <div className="App">
@@ -51,7 +92,8 @@ class App extends React.Component {
               exact
               path="/cart"
               render={ () => (<Cart
-                arrayCarrinho={ arrayCarrinho }
+                removeFromCart={ this.removeFromCart }
+                clickToAddOrRemove={ this.clickToAddOrRemove }
               />) }
             />
             <Route
