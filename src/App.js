@@ -13,6 +13,13 @@ class App extends React.Component {
     };
   }
 
+  componentDidMount = () => {
+    const xablau = Object.values(localStorage);
+    const mapXablau = xablau.map((produto) => JSON.parse(produto));
+    console.log((mapXablau));
+    this.setState({ arrayCarrinho: mapXablau });
+  }
+
   clickToAddOrRemove = (id, name, quantidade) => {
     const { arrayCarrinho } = this.state;
     const newCart = arrayCarrinho.map((product) => {
