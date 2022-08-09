@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { getCategories, getProductsFromCategoryAndQuery } from '../services/api';
 
 class Home extends React.Component {
@@ -35,7 +36,20 @@ componentDidMount = async () => {
     this.setState({ arrayProdutos: termos.results });
   }
 
+  // addCarrinho = (title, price) => {
+  //   const produto = {
+  //     nome: title,
+  //     preço: price,
+  //   };
+  //   console.log(produto);
+  //   this.setState((prevState) => ({
+  //     arrayCarrinho: [...prevState.arrayCarrinho, produto],
+  //   }));
+  // }
+
   render() {
+    const { addCarrinho } = this.props;
+    // console.log(arrayCarrinho);
     const { campoDeBusca, arrayCategorias, arrayProdutos } = this.state;
     return (
       <div>
@@ -86,22 +100,39 @@ componentDidMount = async () => {
           <ul>
             {arrayProdutos.length !== 0
               ? arrayProdutos.map(({ title, price, thumbnail, id }) => (
-                <Link
-                  to={ `/productDetails/${id}` }
-                  key={ id }
-                  data-testid="product-detail-link"
-                >
-                  <li data-testid="product">
-                    <p>{title}</p>
-                    <p>{price}</p>
-                    <img src={ thumbnail } alt={ title } />
-                  </li>
-                </Link>)) : <p>Nenhum produto foi encontrado</p>}
+                <div key={ id }>
+                  <Link
+                    to={ `/productDetails/${id}` }
+                    data-testid="product-detail-link"
+                  >
+                    <li data-testid="product">
+                      <p>{title}</p>
+                      <p>
+                        R$
+                        {price}
+                      </p>
+                      <img src={ thumbnail } alt={ title } />
+                    </li>
+                  </Link>
+                  <button
+                    type="button"
+                    data-testid="product-add-to-cart"
+                    onClick={ () => addCarrinho(title, price, id) }
+                  >
+                    Adicionar ao carrinho
+
+                  </button>
+                </div>
+              )) : <p>Nenhum produto foi encontrado</p>}
           </ul>
         </div>
       </div>
     );
   }
 }
+
+Home.propTypes = {
+  addCarrinho: PropTypes.func.isRequired,
+};
 
 export default Home;
