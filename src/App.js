@@ -12,12 +12,13 @@ class App extends React.Component {
       arrayCarrinho: [],
     };
   }
+  //
 
   componentDidMount = () => {
-    const xablau = Object.values(localStorage);
-    const mapXablau = xablau.map((produto) => JSON.parse(produto));
-    console.log((mapXablau));
-    this.setState({ arrayCarrinho: mapXablau });
+    const recoveredObject = JSON.parse(localStorage.getItem('produto'));
+    if (recoveredObject !== null) {
+      this.setState({ arrayCarrinho: recoveredObject });
+    }
   }
 
   clickToAddOrRemove = (id, name, quantidade) => {
@@ -31,9 +32,7 @@ class App extends React.Component {
       return product;
     });
     localStorage.clear();
-    newCart.forEach((xablau) => {
-      localStorage.setItem(xablau.id, JSON.stringify(xablau));
-    });
+    localStorage.setItem('produto', JSON.stringify(newCart));
     this.setState({ arrayCarrinho: newCart });
   }
 
@@ -41,9 +40,9 @@ class App extends React.Component {
     const { arrayCarrinho } = this.state;
     const productRemoved = arrayCarrinho.filter((products) => products.id !== id);
     localStorage.clear();
-    productRemoved.forEach((xablau) => {
-      localStorage.setItem(xablau.id, JSON.stringify(xablau));
-    });
+    if (productRemoved.length !== 0) {
+      localStorage.setItem('produto', JSON.stringify(productRemoved));
+    }
     this.setState({ arrayCarrinho: productRemoved });
   }
 
@@ -71,9 +70,7 @@ class App extends React.Component {
   localStorageM = () => {
     localStorage.clear();
     const { arrayCarrinho } = this.state;
-    arrayCarrinho.forEach((xablau) => {
-      localStorage.setItem(xablau.id, JSON.stringify(xablau));
-    });
+    localStorage.setItem('produto', JSON.stringify(arrayCarrinho));
   }
 
   render() {
