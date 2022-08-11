@@ -36,21 +36,10 @@ componentDidMount = async () => {
     this.setState({ arrayProdutos: termos.results });
   }
 
-  // addCarrinho = (title, price) => {
-  //   const produto = {
-  //     nome: title,
-  //     preço: price,
-  //   };
-  //   console.log(produto);
-  //   this.setState((prevState) => ({
-  //     arrayCarrinho: [...prevState.arrayCarrinho, produto],
-  //   }));
-  // }
-
   render() {
-    const { addCarrinho } = this.props;
-    // console.log(arrayCarrinho);
+    const { addCarrinho, quantidadeProdutos } = this.props;
     const { campoDeBusca, arrayCategorias, arrayProdutos } = this.state;
+    // const recoveredObject = JSON.parse(localStorage.getItem('produto'));
     return (
       <div>
         <label htmlFor="input">
@@ -82,6 +71,9 @@ componentDidMount = async () => {
             to="/cart"
           >
             Carrinho
+            <span data-testid="shopping-cart-size">
+              { quantidadeProdutos }
+            </span>
           </Link>
         </div>
         <div>
@@ -133,6 +125,7 @@ componentDidMount = async () => {
 
 Home.propTypes = {
   addCarrinho: PropTypes.func.isRequired,
+  quantidadeProdutos: PropTypes.number.isRequired,
 };
 
 export default Home;

@@ -74,7 +74,7 @@ class ProductDetails extends Component {
   render() {
     const { title, thumbnail, price, warranty, id,
       comentario, email, arrayAvaliacao, isNotValid } = this.state;
-    const { addCarrinho } = this.props;
+    const { addCarrinho, quantidadeProdutos } = this.props;
     return (
       <div>
         <div>
@@ -88,6 +88,9 @@ class ProductDetails extends Component {
           </ul>
           <Link to="/cart" data-testid="shopping-cart-button">
             Ir ao carrinho
+            <span data-testid="shopping-cart-size">
+              { quantidadeProdutos }
+            </span>
           </Link>
           <button
             type="button"
@@ -167,6 +170,7 @@ ProductDetails.propTypes = {
     }).isRequired,
   }).isRequired,
   addCarrinho: PropTypes.func.isRequired,
+  quantidadeProdutos: PropTypes.number.isRequired,
 };
 
 export default ProductDetails;
