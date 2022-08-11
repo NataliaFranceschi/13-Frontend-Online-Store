@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Home from './Pages/Home';
 import Cart from './Pages/Cart';
 import ProductDetails from './Pages/ProductDetails';
+import Checkout from './Pages/Checkout';
 
 class App extends React.Component {
   constructor() {
@@ -12,7 +13,6 @@ class App extends React.Component {
       arrayCarrinho: [],
     };
   }
-  //
 
   componentDidMount = () => {
     const recoveredObject = JSON.parse(localStorage.getItem('produto'));
@@ -101,6 +101,11 @@ class App extends React.Component {
                 addCarrinho={ this.addCarrinho }
               />
               ) }
+            />
+            <Route
+              exact
+              path="/checkout/"
+              component={ Checkout }
             />
           </Switch>
         </div>

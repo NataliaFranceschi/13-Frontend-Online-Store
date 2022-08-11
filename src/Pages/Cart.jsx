@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-//
+import { Link } from 'react-router-dom';
 
 class Cart extends React.Component {
   render() {
@@ -44,6 +43,9 @@ class Cart extends React.Component {
     };
     return (
       <div>
+        <Link to="/checkout" data-testid="checkout-products">
+          Finalizar Compra
+        </Link>
         {
           recoveredObject === null
             ? carrinhoVazio
