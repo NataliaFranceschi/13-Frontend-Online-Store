@@ -39,7 +39,6 @@ componentDidMount = async () => {
   render() {
     const { addCarrinho, quantidadeProdutos } = this.props;
     const { campoDeBusca, arrayCategorias, arrayProdutos } = this.state;
-    // const recoveredObject = JSON.parse(localStorage.getItem('produto'));
     return (
       <div>
         <label htmlFor="input">
@@ -91,31 +90,32 @@ componentDidMount = async () => {
         <div>
           <ul>
             {arrayProdutos.length !== 0
-              ? arrayProdutos.map(({ title, price, thumbnail, id }) => (
-                <div key={ id }>
-                  <Link
-                    to={ `/productDetails/${id}` }
-                    data-testid="product-detail-link"
-                  >
-                    <li data-testid="product">
-                      <p>{title}</p>
-                      <p>
-                        R$
-                        {price}
-                      </p>
-                      <img src={ thumbnail } alt={ title } />
-                    </li>
-                  </Link>
-                  <button
-                    type="button"
-                    data-testid="product-add-to-cart"
-                    onClick={ () => addCarrinho(title, price, id) }
-                  >
-                    Adicionar ao carrinho
+              ? arrayProdutos
+                .map(({ title, price, thumbnail, id, available_quantity: quantity }) => (
+                  <div key={ id }>
+                    <Link
+                      to={ `/productDetails/${id}` }
+                      data-testid="product-detail-link"
+                    >
+                      <li data-testid="product">
+                        <p>{title}</p>
+                        <p>
+                          R$
+                          {price}
+                        </p>
+                        <img src={ thumbnail } alt={ title } />
+                      </li>
+                    </Link>
+                    <button
+                      type="button"
+                      data-testid="product-add-to-cart"
+                      onClick={ () => addCarrinho(title, price, id, quantity) }
+                    >
+                      Adicionar ao carrinho
 
-                  </button>
-                </div>
-              )) : <p>Nenhum produto foi encontrado</p>}
+                    </button>
+                  </div>
+                )) : <p>Nenhum produto foi encontrado</p>}
           </ul>
         </div>
       </div>

@@ -12,13 +12,13 @@ class Cart extends React.Component {
       </p>);
     const produtos = () => {
       if (recoveredObject !== null) {
-        return recoveredObject.map(({ nome, preço, quantidade, id }) => (
+        return recoveredObject.map(({ nome, preço, quantidade, id, disponivel }) => (
           <li key={ id }>
             <p data-testid="shopping-cart-product-name">{ nome }</p>
             <p>{ preço * quantidade }</p>
             <p data-testid="shopping-cart-product-quantity">{ quantidade }</p>
             <button
-              onClick={ () => clickToAddOrRemove(id, 'add') }
+              onClick={ () => clickToAddOrRemove(id, 'add', quantidade, disponivel) }
               type="button"
               data-testid="product-increase-quantity"
             >

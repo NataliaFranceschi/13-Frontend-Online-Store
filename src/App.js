@@ -23,12 +23,12 @@ class App extends React.Component {
     }
   }
 
-  clickToAddOrRemove = (id, name, quantidade) => {
+  clickToAddOrRemove = (id, name, quantidade, disponivel) => {
     const { arrayCarrinho } = this.state;
     const newCart = arrayCarrinho.map((product) => {
       if (product.id === id) {
         if (quantidade === 1 && name === 'remove') return product;
-        if (name === 'add') product.quantidade += 1;
+        if (name === 'add' && quantidade < disponivel) product.quantidade += 1;
         if (name === 'remove') product.quantidade -= 1;
       }
       return product;
@@ -50,13 +50,14 @@ class App extends React.Component {
     this.setState({ arrayCarrinho: productRemoved });
   }
 
-  addCarrinho = (title, price, id) => {
+  addCarrinho = (title, price, id, quantity) => {
     const { arrayCarrinho } = this.state;
     const produto = {
       nome: title,
       preço: price,
       quantidade: 1,
       id,
+      disponivel: quantity,
     };
     const newCarrinho = arrayCarrinho.map((product) => {
       if (product.id === id) {
