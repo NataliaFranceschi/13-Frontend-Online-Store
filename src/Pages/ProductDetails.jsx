@@ -17,19 +17,22 @@ class ProductDetails extends Component {
       nota: 0,
       arrayAvaliacao: [],
       isNotValid: false,
+      freteGratis: false,
     };
   }
 
   componentDidMount = async () => {
     const { match: { params: { id } } } = this.props;
     const details = await getDetails(id);
-    const { title, thumbnail, price, warranty } = details;
+    const { title, thumbnail, price, warranty,
+      shipping: { free_shipping: freteGratis } } = details;
     this.setState({
       title,
       thumbnail,
       price,
       warranty,
       id,
+      freteGratis,
     });
     const recoveredObject = JSON.parse(localStorage.getItem(id));
     if (recoveredObject !== null) {
@@ -73,7 +76,7 @@ class ProductDetails extends Component {
 
   render() {
     const { title, thumbnail, price, warranty, id,
-      comentario, email, arrayAvaliacao, isNotValid } = this.state;
+      comentario, email, arrayAvaliacao, isNotValid, freteGratis } = this.state;
     const { addCarrinho, quantidadeProdutos } = this.props;
     return (
       <div>
@@ -85,6 +88,10 @@ class ProductDetails extends Component {
             </li>
             <li data-testid="product-detail-price">{price}</li>
             <li>{warranty}</li>
+            {
+              freteGratis
+              && <span data-testid="free-shipping">Frete Grátis</span>
+            }
           </ul>
           <Link to="/cart" data-testid="shopping-cart-button">
             Ir ao carrinho

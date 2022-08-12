@@ -91,7 +91,9 @@ componentDidMount = async () => {
           <ul>
             {arrayProdutos.length !== 0
               ? arrayProdutos
-                .map(({ title, price, thumbnail, id, available_quantity: quantity }) => (
+                .map(({ title, price, thumbnail, id,
+                  available_quantity: quantity, shipping: { free_shipping: freteGratis },
+                }) => (
                   <div key={ id }>
                     <Link
                       to={ `/productDetails/${id}` }
@@ -104,6 +106,10 @@ componentDidMount = async () => {
                           {price}
                         </p>
                         <img src={ thumbnail } alt={ title } />
+                        {
+                          freteGratis
+                          && <span data-testid="free-shipping">Frete Grátis</span>
+                        }
                       </li>
                     </Link>
                     <button
