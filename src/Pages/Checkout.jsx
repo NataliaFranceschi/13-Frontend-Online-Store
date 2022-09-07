@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Header from '../components/Header';
+import '../styles/checkout.scss';
+import Payment from '../components/Payment';
 
 class Checkout extends Component {
   constructor() {
@@ -13,7 +16,7 @@ class Checkout extends Component {
       cep: '',
       endereco: '',
       pagamento: '',
-      isNotValid: false,
+      isValid: false,
     };
   }
 
@@ -35,11 +38,14 @@ class Checkout extends Component {
     const { history } = this.props;
     const { nome, email, cpf, telefone,
       cep, endereco, pagamento } = this.state;
-    const form = [nome, email, cpf, telefone,
+    const form = [nome, cpf, telefone,
       cep, endereco, pagamento];
-    const isNotValid = form.some((item) => item.length === 0);
-    this.setState({ isNotValid });
-    if (!isNotValid) {
+    const isValid1 = form.every((item) => item.length !== 0);
+    const padraoEmail = /\S+@\S+\.\S+/;
+    const isValid2 = padraoEmail.test(email);
+    const isValid = isValid1 && isValid2;
+    this.setState({ isValid });
+    if (isValid) {
       localStorage.clear();
       history.push('/');
     }
@@ -47,121 +53,98 @@ class Checkout extends Component {
 
   render() {
     const { arrayCarrinho, nome, email, cpf, telefone,
-      cep, endereco, isNotValid } = this.state;
-
+      cep, endereco, isValid } = this.state;
+    const { quantidadeProdutos } = this.props;
+    const total = arrayCarrinho
+      .reduce((acc, { preço, quantidade }) => acc + (preço * quantidade), 0);
     return (
       <div>
-        { arrayCarrinho.map((item, index) => (
-          <div key={ index }>
-            <p>{item.nome}</p>
-            <p>{`R$ ${item.preço * item.quantidade}`}</p>
+        <Header quantidadeProdutos={ quantidadeProdutos } />
+        <div className="checkout">
+          <div className="checkoutItems">
+            <ul>
+              { arrayCarrinho.map((item, index) => (
+                <li key={ index }>
+                  <img src={ item.imagem.replace('-I', '-O') } alt={ item.nome } />
+                  <p className="product">{item.nome}</p>
+                  <p className="price">{`R$ ${item.preço * item.quantidade}`}</p>
+                </li>
+              ))}
+            </ul>
+            <p className="total">{`Total : R$ ${total.toFixed(2)}`}</p>
           </div>
-        ))}
-        <form>
-          <label htmlFor="checkout-fullname">
-            Nome Completo
-            <input
-              type="text"
-              data-testid="checkout-fullname"
-              name="nome"
-              value={ nome }
-              onChange={ this.handleChange }
-            />
-          </label>
-          <label htmlFor="checkout-email">
-            Email
-            <input
-              type="email"
-              data-testid="checkout-email"
-              name="email"
-              value={ email }
-              onChange={ this.handleChange }
-            />
-          </label>
-          <label htmlFor="checkout-cpf">
-            CPF
-            <input
-              type="text"
-              data-testid="checkout-cpf"
-              name="cpf"
-              value={ cpf }
-              onChange={ this.handleChange }
-            />
-          </label>
-          <label htmlFor="checkout-phone">
-            Telefone
-            <input
-              type="text"
-              data-testid="checkout-phone"
-              name="telefone"
-              value={ telefone }
-              onChange={ this.handleChange }
-            />
-          </label>
-          <label htmlFor="checkout-cep">
-            CEP
-            <input
-              type="text"
-              data-testid="checkout-cep"
-              name="cep"
-              value={ cep }
-              onChange={ this.handleChange }
-            />
-          </label>
-          <label htmlFor="checkout-address">
-            Endereço
-            <input
-              type="text"
-              data-testid="checkout-address"
-              name="endereco"
-              value={ endereco }
-              onChange={ this.handleChange }
-            />
-          </label>
-          <label htmlFor="ticket-payment">
-            Boleto
-            <input
-              type="radio"
-              name="pagamento"
-              data-testid="ticket-payment"
-              value="boleto"
-              onClick={ this.handleChange }
-            />
-          </label>
-          <label htmlFor="visa-payment">
-            Visa
-            <input
-              type="radio"
-              name="pagamento"
-              data-testid="visa-payment"
-              value="visa"
-              onClick={ this.handleChange }
-            />
-          </label>
-          <label htmlFor="master-payment">
-            MasterCard
-            <input
-              type="radio"
-              name="pagamento"
-              data-testid="master-payment"
-              value="mastercard"
-              onClick={ this.handleChange }
-            />
-          </label>
-          <label htmlFor="elo-payment">
-            Elo
-            <input type="radio" name="pagamento" data-testid="elo-payment" value="elo" />
-          </label>
-          <button
-            type="button"
-            data-testid="checkout-btn"
-            onClick={ this.handleClick }
-          >
-            {' '}
-            Enviar
-          </button>
-          { isNotValid && <span data-testid="error-msg"> Campos inválidos</span>}
-        </form>
+          <form>
+            <fieldset>
+              {' '}
+              Informações pessoal
+              <input
+                type="text"
+                data-testid="checkout-fullname"
+                name="nome"
+                value={ nome }
+                onChange={ this.handleChange }
+                className="input is-warning"
+                placeholder="Nome Completo"
+              />
+              <input
+                type="email"
+                data-testid="checkout-email"
+                name="email"
+                value={ email }
+                onChange={ this.handleChange }
+                className="input is-warning"
+                placeholder="E-mail"
+              />
+              <input
+                type="text"
+                data-testid="checkout-cpf"
+                name="cpf"
+                value={ cpf }
+                onChange={ this.handleChange }
+                className="input is-warning"
+                placeholder="CPF"
+              />
+              <input
+                type="text"
+                data-testid="checkout-phone"
+                name="telefone"
+                value={ telefone }
+                onChange={ this.handleChange }
+                className="input is-warning"
+                placeholder="Telefone"
+              />
+              <input
+                type="text"
+                data-testid="checkout-cep"
+                name="cep"
+                value={ cep }
+                onChange={ this.handleChange }
+                className="input is-warning"
+                placeholder="CEP"
+              />
+              <input
+                type="text"
+                data-testid="checkout-address"
+                name="endereco"
+                value={ endereco }
+                onChange={ this.handleChange }
+                className="input is-warning"
+                placeholder="Endereço"
+              />
+            </fieldset>
+            <Payment handleChange={ this.handleChange } />
+            <button
+              type="button"
+              data-testid="checkout-btn"
+              onClick={ this.handleClick }
+              className="button"
+            >
+              {' '}
+              Enviar
+            </button>
+            { !isValid && <span data-testid="error-msg"> Campos inválidos</span>}
+          </form>
+        </div>
       </div>
     );
   }
@@ -171,6 +154,7 @@ Checkout.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
+  quantidadeProdutos: PropTypes.number.isRequired,
 };
 
 export default Checkout;

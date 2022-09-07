@@ -1,0 +1,92 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.checkout {
+   @include pageSize;
+
+   .checkoutItems {
+    flex-shrink: 1;
+   ul {
+    min-width: 50%;
+    margin: 10px;
+    height: 75vh;
+    overflow-y: scroll;
+
+    li {
+        @include product;
+        background-color: $white-color;
+    
+        .product {
+            width: 60%;
+        }
+    
+        .price {
+            width: 100px;
+        }
+    
+        img {
+            width: 80px;
+            height: 80px;
+        }
+       }
+    }
+
+    .total {
+        background-color: $terciary-color;
+        padding: 10px;
+        width: 95%;
+        margin: 20px;
+        color: $white-color;
+    }
+   }
+
+   form {
+    @include column;
+    padding: 20px;
+    width: 50%;
+
+    input {
+        margin-bottom: 10px;
+    }
+    input[type='radio'] {
+        margin-right: 20px;
+    }
+
+    button {
+        background-color: $secundary-color;
+    }
+
+    svg {
+        font-size: 25px;
+        vertical-align:middle;
+        margin: 5px
+    }
+
+   }
+}
+
+.pagamento {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+@media screen and (max-width: 720px) {
+    .checkout {
+        flex-direction: column;
+
+        .checkoutItems {
+
+            ul {
+                height: auto;
+                max-height: 40vh;
+            }
+        }
+
+        form{
+            width: 100vw;
+        }
+    }
+
+   
+ }

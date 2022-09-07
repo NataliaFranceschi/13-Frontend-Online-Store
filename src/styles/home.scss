@@ -1,0 +1,112 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.home {
+    display: flex;
+    width: 100vw;
+    background-color: $bg;
+}
+
+.category {
+    @include column;
+    justify-content: flex-start;
+    min-height: 80vh;
+    min-width: 250px;
+
+    button {
+        border: none;
+        padding: 5px;
+        background-color: $white-color;
+    }
+
+    button:hover {
+        background-color: $secundary-color;
+        color: $white-color;
+        cursor: pointer;
+    }
+}
+
+.categoryPhone {
+    display: none;
+}
+
+.search {
+    @include column; 
+    width: 100%;
+
+   .inputSearch {
+    input {
+        width: 250px;
+        margin: 20px;
+    }
+
+    button {
+        background-color: $secundary-color;
+        margin-top: 20px;
+    }
+
+   }
+
+    .products {
+        display: flex;
+        flex-wrap: wrap;
+        flex-basis: 100%;
+        justify-content: space-evenly;
+        
+        .product {
+            @include column;
+            width: 300px;
+            height: auto;
+            align-items: center;
+            margin: 10px;
+            padding: 10px;
+            justify-content: space-between;
+            background-color: $white-color;
+            border-radius: $borders;
+            box-shadow: $shadowing;
+
+            img {
+                height: 150px;
+                max-width: 100%;
+                margin: 10px;
+            }
+
+            button {
+                background-color: $secundary-color;
+            }
+
+            p {
+                margin: 5px;
+            }
+
+            .productPrice {
+                font-weight: 500;
+            }
+
+        }
+
+    }
+
+}
+
+@media screen and (max-width: 720px) {
+   .category {
+    display: none;
+   }
+
+   .home {
+    flex-direction: column;
+   }
+   .categoryPhone{
+    display: flex;  
+    align-self: center;
+    margin-top: 15px;
+    
+    select {
+        padding: 5px;
+        border-radius: 4px;
+        border: solid 1px $secundary-color;
+        background-color: $white-color;
+    }
+   }
+}

@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+
 import { getDetails } from '../services/api';
+import Header from '../components/Header';
+
+import '../styles/productDetail.scss';
+import ProductImage from '../components/ProductImage';
+import BasicDetails from '../components/BasicDetails';
+import Rating from '../components/Rating';
 
 class ProductDetails extends Component {
   constructor() {
@@ -12,28 +18,38 @@ class ProductDetails extends Component {
       price: 0,
       warranty: '',
       id: '',
-      email: '',
+      nome: '',
       comentario: '',
-      nota: 0,
+      nota: '0',
       arrayAvaliacao: [],
       isNotValid: false,
       freteGratis: false,
+      attributes: [],
+      quantity: 0,
+      pictures: [],
+      picture: '',
     };
   }
 
   componentDidMount = async () => {
     const { match: { params: { id } } } = this.props;
     const details = await getDetails(id);
-    const { title, thumbnail, price, warranty,
-      shipping: { free_shipping: freteGratis } } = details;
+    const { title, thumbnail, price, warranty, attributes, available_quantity: quantity,
+      shipping: { free_shipping: freteGratis }, pictures } = details;
     this.setState({
       title,
       thumbnail,
       price,
-      warranty,
       id,
       freteGratis,
+      attributes,
+      quantity,
+      pictures,
+      picture: pictures[0].url,
     });
+    if (warranty !== null) {
+      this.setState({ warranty });
+    }
     const recoveredObject = JSON.parse(localStorage.getItem(id));
     if (recoveredObject !== null) {
       this.setState({ arrayAvaliacao: recoveredObject });
@@ -48,13 +64,12 @@ class ProductDetails extends Component {
   };
 
   handleClick = () => {
-    const { email, comentario, nota } = this.state;
-    const padraoEmail = /\S+@\S+\.\S+/;
-    if (nota < 1 || !padraoEmail.test(email)) {
+    const { nome, comentario, nota } = this.state;
+    if (nota < 1 || nome.length === 0) {
       this.setState({ isNotValid: true });
     } else {
       const obj = {
-        email,
+        nome,
         comentario,
         nota,
       };
@@ -62,8 +77,9 @@ class ProductDetails extends Component {
         arrayAvaliacao: [...prevState.arrayAvaliacao, obj],
       }), this.localStorageSave);
       this.setState({
-        email: '',
+        nome: '',
         comentario: '',
+        nota: '0',
         isNotValid: false,
       });
     }
@@ -74,98 +90,62 @@ class ProductDetails extends Component {
     localStorage.setItem(id, JSON.stringify(arrayAvaliacao));
   }
 
+  changePicture = ({ target }) => {
+    this.setState({ picture: target.src });
+  }
+
   render() {
-    const { title, thumbnail, price, warranty, id,
-      comentario, email, arrayAvaliacao, isNotValid, freteGratis } = this.state;
+    const { title, thumbnail, price, warranty, id, attributes, quantity, pictures,
+      picture, comentario, nome, arrayAvaliacao,
+      isNotValid, freteGratis, nota } = this.state;
     const { addCarrinho, quantidadeProdutos } = this.props;
+    const obj = { title, price, id, thumbnail, quantity };
+    const filterAtrributes = attributes
+      .filter(({ value_name: value }) => (value !== null));
     return (
       <div>
-        <div>
-          <ul>
-            <li data-testid="product-detail-name">{title}</li>
-            <li>
-              <img src={ thumbnail } alt={ title } data-testid="product-detail-image" />
-            </li>
-            <li data-testid="product-detail-price">{price}</li>
-            <li>{warranty}</li>
-            {
-              freteGratis
-              && <span data-testid="free-shipping">Frete Grátis</span>
-            }
-          </ul>
-          <Link to="/cart" data-testid="shopping-cart-button">
-            Ir ao carrinho
-            <span data-testid="shopping-cart-size">
-              { quantidadeProdutos }
-            </span>
-          </Link>
-          <button
-            type="button"
-            data-testid="product-detail-add-to-cart"
-            onClick={ () => addCarrinho(title, price, id) }
-          >
-            Adicionar ao carrinho
-          </button>
-        </div>
-        <form>
-          <div>
-            <label htmlFor="product-detail-email">
-              <input
-                type="email"
-                id="product-detail-email"
-                data-testid="product-detail-email"
-                name="email"
-                onChange={ this.handleChange }
-                value={ email }
-              />
-            </label>
+        <Header quantidadeProdutos={ quantidadeProdutos } />
+        <section className="productDetails">
+          <div className="showProduct">
+            <ProductImage
+              picture={ picture }
+              pictures={ pictures }
+              title={ title }
+              changePicture={ this.changePicture }
+            />
+            <BasicDetails
+              title={ title }
+              warranty={ warranty }
+              price={ price }
+              freteGratis={ freteGratis }
+              addCarrinho={ addCarrinho }
+              obj={ obj }
+            />
           </div>
-          <div>
-            { Array.from({ length: 5 }).map((_, index) => (
-              <label key={ index } htmlFor={ `${index + 1}-rating` }>
-                {index + 1}
-                <input
-                  data-testid={ `${index + 1}-rating` }
-                  id={ `${index + 1}-rating` }
-                  type="radio"
-                  name="nota"
-                  onClick={ this.handleChange }
-                  value={ index + 1 }
-                />
-              </label>
-            ))}
+          <div className="productInformation">
+            <table>
+              <tbody>
+                {
+                  filterAtrributes.map(({ name, value_name: value }, index) => (
+                    <tr key={ index }>
+                      <td className="name">{name}</td>
+                      <td className="value">{value}</td>
+                    </tr>
+                  ))
+                }
+              </tbody>
+            </table>
+            <Rating
+              comentario={ comentario }
+              nome={ nome }
+              nota={ nota }
+              arrayAvaliacao={ arrayAvaliacao }
+              isNotValid={ isNotValid }
+              handleChange={ this.handleChange }
+              handleClick={ this.handleClick }
+            />
           </div>
-          <div>
-            <label htmlFor="product-detail-evaluation">
-              <textarea
-                data-testid="product-detail-evaluation"
-                name="comentario"
-                onChange={ this.handleChange }
-                value={ comentario }
-              />
-            </label>
-          </div>
-          <button
-            type="button"
-            data-testid="submit-review-btn"
-            onClick={ this.handleClick }
-          >
-            ENVIAR
-
-          </button>
-          { isNotValid && <span data-testid="error-msg"> Campos inválidos</span>}
-        </form>
-        <div>
-          {
-            arrayAvaliacao.map((avaliacao, index) => (
-              <div key={ index }>
-                <p data-testid="review-card-email">{avaliacao.email}</p>
-                <p data-testid="review-card-rating">{`nota:${avaliacao.nota}`}</p>
-                <p data-testid="review-card-evaluation">{avaliacao.comentario}</p>
-              </div>
-            ))
-          }
-        </div>
+        </section>
       </div>
     );
   }

@@ -1,0 +1,20 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.star{
+    display: none;
+}
+
+.rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+}
+
+.yellow:hover {
+    color: $secundary-color;
+}
+
+.yellow:hover ~ .yellow {
+     color: $secundary-color;
+}

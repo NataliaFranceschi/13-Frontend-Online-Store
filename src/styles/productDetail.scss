@@ -1,0 +1,144 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.name {
+    background-color: rgb(219, 216, 216);
+    border-bottom: 2px white solid;
+}
+
+.value {
+    background-color: white;
+    border-bottom: 2px rgb(219, 216, 216) solid;
+}
+
+.pictureDetail {
+    @include column;
+    align-items: center;
+    
+    .exibition {
+        margin: 10px;
+        height: 400px;
+        width: auto;
+    }
+
+    div {
+        display: flex;
+        overflow-x: scroll;
+        max-height: 100px ;
+        width: 500px;
+        
+        img {
+            margin: 5px;
+            height: 70px;
+            width: 70px;
+            }
+        }
+}
+
+.productDetails {
+    @include column;
+
+    .showProduct {
+        display: flex;
+        justify-content: space-evenly;
+
+        .pictureDetail {
+            width: 500px;
+        }
+
+        .basicDetails {
+            @include column;
+            background-color: $white-color;
+            width: 400px;
+            height: 400px;
+            justify-content: space-evenly;
+            margin: 10px;
+            align-items: center;
+            padding: 10px;
+
+            h1 {
+                font-size: 20px;
+                font-weight: bold;
+            }
+
+            .productPrice {
+                font-size: 25px;
+                font-weight: 500;
+            }
+
+            .button {
+                background-color: $secundary-color;
+                width: 200px;
+            }
+        }
+
+    }
+
+    .productInformation {
+        display: flex;
+        justify-content: space-evenly;
+
+        table {
+            margin: 20px;
+            width: 500px;
+        }
+
+        .productRating {
+            width: 300px;
+
+            form {
+                @include column;
+            }
+
+            input, textarea {
+                margin: 5px;
+            }
+
+            button {
+                background-color: $secundary-color;
+                margin: 10px;
+                width: 100%;
+            }
+        }
+
+        .avaliacao {
+            text-align: start;
+            margin: 10px;
+        }
+        
+    }
+}
+
+@media screen and (max-width: 850px) {
+    .pictureDetail{
+        width: 90%;
+
+        div{
+            width: 100%;
+        }
+    }
+    
+    .productDetails {
+
+        .showProduct{
+            flex-direction: column-reverse;
+            align-items:center;
+    
+            .basicDetails{
+                width: 90%;
+            }
+        }
+    
+        .productInformation{
+            width: 100vw;
+            flex-direction: column;
+            align-items: center;
+    
+            table {
+                width: 90%;
+            }
+    
+        }
+    }
+    
+ }

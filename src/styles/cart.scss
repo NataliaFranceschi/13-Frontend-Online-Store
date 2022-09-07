@@ -1,0 +1,101 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+body {
+    background-color: $bg;
+    min-height: 90vh;
+    max-width: 100vw;
+}
+
+.cart {
+    @include pageSize;
+
+    aside {
+        background-color: white;
+        height: 300px;
+        min-width: 220px;
+        margin: 20px;
+        @include column;
+        justify-content: space-around;
+        align-items: center;
+        
+        p{
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+    
+        button {
+        background-color: $secundary-color;
+       }
+
+    }
+
+    ul {
+        width: 80%;
+        margin-top: 20px;
+    }
+    
+}
+
+.cartItem {
+    @include product;
+    background-color: $white-color;
+    margin-left: 20px;
+    justify-content: space-evenly;
+
+    .product {
+        width: 40%;
+    }
+
+    .price {
+        width: 100px;
+    }
+
+    img {
+        width: 80px;
+        height: 80px;
+    }
+
+    button {
+        background-color: $terciary-color;
+        color: white;
+        font-size: small;
+    }
+
+    button:hover{
+        color: white;
+    }
+
+    .quantity {
+        button {
+            width: 5px;
+            height: 5px;
+        }
+        @include column;
+        justify-content: space-evenly;
+
+    }
+}
+
+@media screen and (max-width: 720px) {
+    .cart {
+        flex-direction: column-reverse;
+
+        ul {
+            @include column;
+            width: 95%;
+            margin-left: 10px;
+        }
+    }
+
+    .cartItem {
+        @include column;
+        width: 100%;
+        margin: 0;
+        margin-bottom: 10px;
+
+        .product{
+            width: 90%;
+        }
+    }
+ }

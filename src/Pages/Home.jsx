@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { getCategories, getProductsFromCategoryAndQuery } from '../services/api';
+import Header from '../components/Header';
+import '../styles/home.scss';
 
 class Home extends React.Component {
   constructor() {
@@ -32,8 +34,10 @@ componentDidMount = async () => {
   }
 
   handleClickButton = async ({ target }) => {
-    const termos = await getProductsFromCategoryAndQuery(target.value, '');
-    this.setState({ arrayProdutos: termos.results });
+    if (target.value !== '') {
+      const termos = await getProductsFromCategoryAndQuery(target.value, '');
+      this.setState({ arrayProdutos: termos.results });
+    }
   }
 
   render() {
@@ -41,88 +45,94 @@ componentDidMount = async () => {
     const { campoDeBusca, arrayCategorias, arrayProdutos } = this.state;
     return (
       <div>
-        <label htmlFor="input">
-          <input
-            type="text"
-            id="input"
-            value={ campoDeBusca }
-            name="campoDeBusca"
-            onChange={ this.handleChange }
-            data-testid="query-input"
-          />
-        </label>
-        <button
-          type="button"
-          data-testid="query-button"
-          onClick={ this.handleClick }
-        >
-          Pesquisar
-
-        </button>
-        <div>
-          <p
-            data-testid="home-initial-message"
-          >
-            Digite algum termo de pesquisa ou escolha uma categoria.
-          </p>
-          <Link
-            data-testid="shopping-cart-button"
-            to="/cart"
-          >
-            Carrinho
-            <span data-testid="shopping-cart-size">
-              { quantidadeProdutos }
-            </span>
-          </Link>
-        </div>
-        <div>
-          { arrayCategorias.map(({ name, id }) => (
-            <button
-              key={ name }
-              type="button"
-              value={ id }
-              data-testid="category"
-              onClick={ this.handleClickButton }
+        <Header quantidadeProdutos={ quantidadeProdutos } />
+        <div className="home">
+          <div className="category">
+            { arrayCategorias.map(({ name, id }) => (
+              <button
+                key={ name }
+                type="button"
+                value={ id }
+                data-testid="category"
+                onClick={ this.handleClickButton }
+              >
+                {name}
+              </button>)) }
+          </div>
+          <div className="categoryPhone">
+            <select
+              onChange={ this.handleClickButton }
             >
-              {name}
-            </button>)) }
-        </div>
-        <div>
-          <ul>
-            {arrayProdutos.length !== 0
-              ? arrayProdutos
-                .map(({ title, price, thumbnail, id,
-                  available_quantity: quantity, shipping: { free_shipping: freteGratis },
-                }) => (
-                  <div key={ id }>
-                    <Link
-                      to={ `/productDetails/${id}` }
-                      data-testid="product-detail-link"
-                    >
-                      <li data-testid="product">
-                        <p>{title}</p>
-                        <p>
+              <option value="">Categorias</option>
+              { arrayCategorias.map(({ name, id }) => (
+                <option
+                  key={ name }
+                  value={ id }
+                >
+                  {name}
+                </option>)) }
+            </select>
+          </div>
+          <div className="search">
+            <div className="inputSearch">
+              <input
+                type="text"
+                id="input"
+                value={ campoDeBusca }
+                name="campoDeBusca"
+                onChange={ this.handleChange }
+                data-testid="query-input"
+                className="input is-warning"
+              />
+
+              <button
+                type="button"
+                data-testid="query-button"
+                onClick={ this.handleClick }
+                className="button is-warning"
+              >
+                Pesquisar
+
+              </button>
+            </div>
+            <ul className="products">
+              {arrayProdutos.length !== 0
+                && arrayProdutos
+                  .map(({ title, price, thumbnail, id, available_quantity: quantity,
+                    shipping: { free_shipping: freteGratis },
+                  }) => {
+                    const obj = { title, price, id, quantity, thumbnail };
+                    return (
+                      <li className="product" data-testid="product" key={ id }>
+                        <img src={ thumbnail.replace('-I', '-O') } alt={ title } />
+                        <Link
+                          to={ `/productDetails/${id}` }
+                          data-testid="product-detail-link"
+                        >
+                          <p>{title}</p>
+                        </Link>
+                        <p className="productPrice">
                           R$
                           {price}
                         </p>
-                        <img src={ thumbnail } alt={ title } />
                         {
                           freteGratis
                           && <span data-testid="free-shipping">Frete Grátis</span>
                         }
-                      </li>
-                    </Link>
-                    <button
-                      type="button"
-                      data-testid="product-add-to-cart"
-                      onClick={ () => addCarrinho(title, price, id, quantity) }
-                    >
-                      Adicionar ao carrinho
+                        <button
+                          type="button"
+                          data-testid="product-add-to-cart"
+                          onClick={ () => addCarrinho(obj) }
+                          className="button is-warning"
+                        >
+                          Adicionar ao carrinho
 
-                    </button>
-                  </div>
-                )) : <p>Nenhum produto foi encontrado</p>}
-          </ul>
+                        </button>
+                      </li>
+                    );
+                  })}
+            </ul>
+          </div>
         </div>
       </div>
     );

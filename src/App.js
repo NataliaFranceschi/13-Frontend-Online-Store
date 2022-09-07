@@ -5,6 +5,7 @@ import Home from './Pages/Home';
 import Cart from './Pages/Cart';
 import ProductDetails from './Pages/ProductDetails';
 import Checkout from './Pages/Checkout';
+import 'bulma/css/bulma.min.css';
 
 class App extends React.Component {
   constructor() {
@@ -33,9 +34,7 @@ class App extends React.Component {
       }
       return product;
     });
-    localStorage.clear();
-    localStorage.setItem('produto', JSON.stringify(newCart));
-    this.getAmount(newCart);
+    this.saveLocalStorage(newCart);
     this.setState({ arrayCarrinho: newCart });
   }
 
@@ -45,12 +44,13 @@ class App extends React.Component {
     this.getAmount(productRemoved);
     localStorage.clear();
     if (productRemoved.length !== 0) {
-      localStorage.setItem('produto', JSON.stringify(productRemoved));
+      this.saveLocalStorage(productRemoved);
     }
     this.setState({ arrayCarrinho: productRemoved });
   }
 
-  addCarrinho = (title, price, id, quantity) => {
+  addCarrinho = (obj) => {
+    const { title, price, id, quantity, thumbnail } = obj;
     const { arrayCarrinho } = this.state;
     const produto = {
       nome: title,
@@ -58,6 +58,7 @@ class App extends React.Component {
       quantidade: 1,
       id,
       disponivel: quantity,
+      imagem: thumbnail,
     };
     const newCarrinho = arrayCarrinho.map((product) => {
       if (product.id === id) {
@@ -68,17 +69,16 @@ class App extends React.Component {
     if (!arrayCarrinho.some((item) => id === item.id)) {
       this.setState((prevState) => ({
         arrayCarrinho: [...prevState.arrayCarrinho, produto],
-      }), this.localStorageM);
+      }), this.saveLocalStorage);
     } else {
       this.setState({ arrayCarrinho: newCarrinho },
-        this.localStorageM);
+        this.saveLocalStorage);
     }
   }
 
-  localStorageM = () => {
-    localStorage.clear();
+  saveLocalStorage = (produtos) => {
     const { arrayCarrinho } = this.state;
-    localStorage.setItem('produto', JSON.stringify(arrayCarrinho));
+    localStorage.setItem('produto', JSON.stringify(produtos ?? arrayCarrinho));
     this.getAmount(arrayCarrinho);
   }
 
@@ -108,6 +108,7 @@ class App extends React.Component {
               render={ () => (<Cart
                 removeFromCart={ this.removeFromCart }
                 clickToAddOrRemove={ this.clickToAddOrRemove }
+                quantidadeProdutos={ quantidadeProdutos }
               />) }
             />
             <Route
@@ -123,7 +124,11 @@ class App extends React.Component {
             <Route
               exact
               path="/checkout/"
-              component={ Checkout }
+              render={ (props) => (<Checkout
+                { ...props }
+                quantidadeProdutos={ quantidadeProdutos }
+              />) }
+
             />
           </Switch>
         </div>

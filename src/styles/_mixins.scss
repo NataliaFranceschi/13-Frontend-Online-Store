@@ -1,0 +1,19 @@
+@mixin column {
+    display: flex;
+    flex-direction: column;
+}
+
+@mixin pageSize {
+    display: flex;
+    width: 100%;
+    min-height: 90vh;
+}
+
+@mixin product {
+    display: flex;
+    justify-content: center;
+    height: auto;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 5px;
+}

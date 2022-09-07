@@ -1,0 +1,42 @@
+@use 'variables' as *;
+@import url('https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap');
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: $primary-color;
+    height: 80px;
+    padding: 20px;
+    border-bottom: 5px solid $secundary-color;
+
+    div {
+        font-family: "YesevaOne";
+        font-size: 70px;
+        font-weight: bold;
+       
+        
+        .online {
+            position: absolute;
+            top: -20px;
+            
+        }
+
+        .store {
+            color: $secundary-color;
+            position:absolute;
+            top: -10px;
+            left: 50px;
+
+        }
+    }
+
+    span {
+        color: white;
+    }
+
+    svg {
+        color: $white-color;
+        font-size: 25px;
+    }
+}
