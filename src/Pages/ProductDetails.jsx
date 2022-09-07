@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
 import { getDetails } from '../services/api';
 import Header from '../components/Header';
-
 import '../styles/productDetail.scss';
 import ProductImage from '../components/ProductImage';
 import BasicDetails from '../components/BasicDetails';
