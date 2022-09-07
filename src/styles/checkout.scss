@@ -5,9 +5,9 @@
    @include pageSize;
 
    .checkoutItems {
-    flex-shrink: 1;
+     width: 60%;
+      
    ul {
-    min-width: 50%;
     margin: 10px;
     height: 70vh;
     overflow-y: scroll;
@@ -43,7 +43,7 @@
    form {
     @include column;
     padding: 20px;
-    width: 50%;
+    width: 40%;
 
     input {
         margin-bottom: 10px;
@@ -76,7 +76,8 @@
         flex-direction: column;
 
         .checkoutItems {
-
+            width: 100%;
+           
             ul {
                 height: auto;
                 max-height: 40vh;
