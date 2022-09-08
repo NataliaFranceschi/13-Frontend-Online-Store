@@ -1,16 +1,11 @@
-# 🚧 README em construção 🚧
+# Boas-vindas ao repositório do projeto Frontend Online Store!
 
-<!-- Olá, Tryber!
+Projeto desenvolvido em grupo no curso da Trybe ao final do bloco 13* do Módulo 2 - Desenvolvimento Front-end.<br><br>
+<strong>Bloco 13: Metodologias Ágeis</strong><br>
+ 13.1 - Metodologias Ágeis<br>
+ 13.2 - Projeto - Frontend Online Store<br><br>
 
-Esse é apenas um arquivo inicial para o README do seu projeto.
+No projeto <strong>Frontend Online Store</strong> foi desenvolvida uma aplicação em react simulando um site de vendas de produtos. Na página inicial é possível procurar produtos através do nome ou por categorias, ao clicar no produto desejado a aplicação é redirecionada para uma página com detalhes do mesmo. No carrinho de compra é possível remover ou alterar a quantidade do produto, conforme a disponibilidade em estoque. Por fim é renderizado uma página com o resumo da compra e um formulário para colocar informações do comprador assim como a forma de pagamento.<br>
+O CSS do projeto foi feito individualmente.
 
-É essencial que você preencha esse documento por conta própria, ok?
-
-Não deixe de usar nossas dicas de escrita de README de projetos, e deixe sua criatividade brilhar!
-
-⚠️ IMPORTANTE: você precisa deixar nítido:
-- quais arquivos/pastas foram desenvolvidos por você; 
-- quais arquivos/pastas foram desenvolvidos por outra pessoa estudante;
-- quais arquivos/pastas foram desenvolvidos pela Trybe.
-
--->
+![online-store](online-store.gif)
