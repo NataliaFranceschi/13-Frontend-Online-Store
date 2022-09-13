@@ -47,7 +47,7 @@ class Checkout extends Component {
     this.setState({ isValid });
     if (isValid) {
       localStorage.clear();
-      history.push('/');
+      history.push('/13-Frontend-Online-Store/');
     }
   }
 
